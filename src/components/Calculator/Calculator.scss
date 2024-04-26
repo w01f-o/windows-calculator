@@ -59,12 +59,40 @@
 
   &__memory {
     &-control {
+      display: flex;
+      justify-content: space-between;
       grid-area: memory;
+      margin-bottom: 0.4rem;
     }
 
     &-content {
       font: {
         size: 12px;
+      }
+    }
+
+    &-button {
+      background: none;
+      border: none;
+      border-radius: 0.3rem;
+      text-align: center;
+      flex-grow: 1;
+      padding-block: 0.5rem;
+      font: {
+        size: 0.75rem;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      &_unactive {
+        color: gray;
+
+        &:hover {
+          background: none;
+          cursor: auto;
+        }
       }
     }
   }
