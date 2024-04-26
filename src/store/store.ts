@@ -1,12 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import HistoryReducer from "./History/HistorySlice.ts";
-import MemoryReducer from "./Memory/MemorySlice.ts";
-import OutputReducer from "./Output/OutputSlice.ts";
+import calculatorReducer from "./calculator/calculatorSlice.ts";
 
 const rootReducer = combineReducers({
-  history: HistoryReducer,
-  memory: MemoryReducer,
-  output: OutputReducer,
+  calculator: calculatorReducer,
 });
 
 export const setupStore = () => {
