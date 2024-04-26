@@ -1,0 +1,96 @@
+@import "../../scss/utils/index";
+
+.calculator {
+  display: grid;
+  grid-template-areas:
+    "output output sidebar"
+    "memory memory sidebar"
+    "keboard keyboard sidebar";
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  border-radius: 1rem;
+
+  &__keyboard {
+    display: grid;
+    grid-template: repeat(6, 3rem) / repeat(4, 4.5rem);
+    grid-gap: 0.1rem;
+    grid-area: keyboard;
+  }
+
+  &__sidebar {
+    grid-area: sidebar;
+    padding-left: 1rem;
+    width: 240px;
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+
+      &__item {
+        cursor: pointer;
+        position: relative;
+        font: {
+          size: 12px;
+        }
+
+        &_active {
+          &::before {
+            content: "";
+            position: absolute;
+            bottom: -52%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 1rem;
+
+            width: 40%;
+            height: 3px;
+
+            background: #5e5eff;
+          }
+        }
+      }
+
+      &__content {
+        flex: 1 0 100%;
+      }
+    }
+  }
+
+  &__memory {
+    &-control {
+      grid-area: memory;
+    }
+
+    &-content {
+      font: {
+        size: 12px;
+      }
+    }
+  }
+
+  &__output {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 0;
+    grid-area: output;
+    min-height: 3rem;
+    text-align: end;
+  }
+
+  &__result {
+    font: {
+      size: 2rem;
+      weight: 500;
+    }
+  }
+
+  &__expression {
+    font: {
+      size: 0.8rem;
+    }
+    color: gray;
+    letter-spacing: 0.2rem;
+  }
+}

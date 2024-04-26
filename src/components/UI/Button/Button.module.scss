@@ -1,0 +1,25 @@
+@import "../../../scss/utils/index";
+
+.button {
+  $transitionTime: 0.05s;
+
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 0.2rem;
+  transition: $transitionTime;
+  background: $whiteColor;
+  box-shadow: 0 0 1px -1px rgba(0, 0, 0, 0.75);
+
+  font: {
+    size: 16px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transition: $transitionTime;
+  }
+
+  &:active {
+    opacity: 0.8;
+    transition: $transitionTime;
+  }
+}
