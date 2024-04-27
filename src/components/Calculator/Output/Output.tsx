@@ -16,7 +16,7 @@ const Output: FC = () => {
       <div className="calculator__expression">
         {b !== "" ? `${a} ${sign} ${b} =` : `${a} ${sign} ${a} =`}
       </div>
-      <div className="calculator__result">{formatNumber(result, 4)}</div>
+      <div className="calculator__result">{formatNumber(result, 8)}</div>
     </div>
   ) : (
     <div className="calculator__output">
@@ -25,7 +25,7 @@ const Output: FC = () => {
         {sign === "" && b !== "" && `${a} ${sign} ${b}`}
       </div>
       <div className="calculator__result">
-        {b === "" ? formatNumber(a, 4) : formatNumber(b, 4)}
+        {b === "" ? formatNumber(a, 8) : formatNumber(b, 8)}
       </div>
     </div>
   );

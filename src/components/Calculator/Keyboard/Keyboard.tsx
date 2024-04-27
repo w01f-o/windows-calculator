@@ -85,7 +85,7 @@ const Keyboard: FC = () => {
         case "/":
           if (tempB === "0") {
             dispatch(CE());
-            dispatch(setFixedA("Error"));
+            dispatch(setFixedA("Ошибка"));
           } else {
             dispatch(setResult(`${+tempA / +tempB}`));
           }
