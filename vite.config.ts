@@ -11,6 +11,7 @@ export default defineConfig({
       "@/styles": "/src/scss",
       "@/store": "/src/store",
       "@/types": "/src/types",
+      "@/utils": "/src/utils",
     },
   },
 });

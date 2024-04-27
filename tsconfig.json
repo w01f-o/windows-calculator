@@ -19,7 +19,8 @@
       "@/hooks/*": ["hooks/*"],
       "@/styles/*": ["scss/*"],
       "@/store/*": ["store/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
     },
 
     /* Linting */

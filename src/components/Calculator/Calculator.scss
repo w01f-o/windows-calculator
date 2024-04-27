@@ -2,10 +2,9 @@
 
 .calculator {
   display: grid;
-  grid-template-areas:
-    "output output sidebar"
-    "memory memory sidebar"
-    "keboard keyboard sidebar";
+  height: 480px;
+  max-width: 620px;
+  grid-template: 2fr 1fr 4fr / 4fr 3.6fr;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 2rem;
   border-radius: 1rem;
@@ -14,18 +13,24 @@
     display: grid;
     grid-template: repeat(6, 3rem) / repeat(4, 4.5rem);
     grid-gap: 0.1rem;
-    grid-area: keyboard;
   }
 
   &__sidebar {
-    grid-area: sidebar;
+    grid-row: span 3;
     padding-left: 1rem;
-    width: 240px;
 
     .tabs {
+      $transitionTime: 0.15s;
+
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 2rem;
+      height: 100%;
+
+      &__control {
+        display: flex;
+        gap: 1rem;
+      }
 
       &__item {
         cursor: pointer;
@@ -34,25 +39,32 @@
           size: 12px;
         }
 
+        &::before {
+          content: "";
+          position: absolute;
+          bottom: -52%;
+          left: 50%;
+          transform: translateX(-50%);
+          border-radius: 1rem;
+          opacity: 0;
+          transition: $transitionTime;
+          width: 40%;
+          height: 3px;
+
+          background: #5e5eff;
+        }
+
         &_active {
           &::before {
-            content: "";
-            position: absolute;
-            bottom: -52%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 1rem;
-
-            width: 40%;
-            height: 3px;
-
-            background: #5e5eff;
+            opacity: 1;
           }
         }
       }
 
       &__content {
-        flex: 1 0 100%;
+        flex-grow: 1;
+        overflow-y: scroll;
+        scrollbar-width: none;
       }
     }
   }
@@ -61,7 +73,6 @@
     &-control {
       display: flex;
       justify-content: space-between;
-      grid-area: memory;
       margin-bottom: 0.4rem;
     }
 
@@ -105,7 +116,35 @@
     }
 
     &-item {
+      $transitionTime: 0.15s;
+
       cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.3rem;
+      transition: $transitionTime;
+
+      &.history-item-enter {
+        opacity: 0;
+      }
+
+      &.history-item-enter-active {
+        opacity: 1;
+        transition: opacity $transitionTime;
+      }
+
+      &.history-item-exit {
+        opacity: 1;
+      }
+
+      &.history-item-exit-active {
+        opacity: 0;
+        transition: opacity $transitionTime;
+      }
+
+      &:hover {
+        background: #e0e0e0;
+        transition: $transitionTime;
+      }
 
       span {
         display: block;
@@ -133,7 +172,6 @@
     justify-content: space-between;
     gap: 0.3rem;
     padding: 1rem 0;
-    grid-area: output;
     min-height: 5.7rem;
     text-align: end;
   }

@@ -16,8 +16,8 @@ const History: FC = () => {
       {history.map((item: IHistory) => (
         <div
           className="calculator__history-item"
-          key={item.id}
           onClick={clickHandler(item)}
+          key={item.id}
         >
           <span>{`${item.expression.a} ${item.expression.sign} ${item.expression.b} =`}</span>
           <span>{item.result}</span>

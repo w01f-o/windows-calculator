@@ -51,6 +51,8 @@ const Keyboard: FC = () => {
     }
 
     if (key === "=") {
+      if (sign === "" && !isFinish) return;
+
       dispatch(setIsFinish(true));
 
       let tempA = a;

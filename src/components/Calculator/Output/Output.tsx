@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useAppSelector } from "@/hooks/redux.ts";
+import { formatNumber } from "@/utils/formatNumber.ts";
 
 const Output: FC = () => {
   const {
@@ -15,7 +16,7 @@ const Output: FC = () => {
       <div className="calculator__expression">
         {b !== "" ? `${a} ${sign} ${b} =` : `${a} ${sign} ${a} =`}
       </div>
-      <div className="calculator__result">{result}</div>
+      <div className="calculator__result">{formatNumber(result, 4)}</div>
     </div>
   ) : (
     <div className="calculator__output">
@@ -23,7 +24,9 @@ const Output: FC = () => {
         {sign !== "" && `${a} ${sign}`}
         {sign === "" && b !== "" && `${a} ${sign} ${b}`}
       </div>
-      <div className="calculator__result">{b === "" ? a : b}</div>
+      <div className="calculator__result">
+        {b === "" ? formatNumber(a, 4) : formatNumber(b, 4)}
+      </div>
     </div>
   );
 };

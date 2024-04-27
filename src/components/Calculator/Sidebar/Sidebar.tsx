@@ -20,21 +20,23 @@ const Sidebar: FC = () => {
   return (
     <div className="calculator__sidebar">
       <div className="tabs">
-        <div
-          className={clsx("tabs__item", {
-            tabs__item_active: currentTab === CalculatorTabsEnum.history,
-          })}
-          onClick={clickHandler(CalculatorTabsEnum.history)}
-        >
-          Журнал
-        </div>
-        <div
-          className={clsx("tabs__item", {
-            tabs__item_active: currentTab === CalculatorTabsEnum.log,
-          })}
-          onClick={clickHandler(CalculatorTabsEnum.log)}
-        >
-          Память
+        <div className="tabs__control">
+          <div
+            className={clsx("tabs__item", {
+              tabs__item_active: currentTab === CalculatorTabsEnum.history,
+            })}
+            onClick={clickHandler(CalculatorTabsEnum.history)}
+          >
+            Журнал
+          </div>
+          <div
+            className={clsx("tabs__item", {
+              tabs__item_active: currentTab === CalculatorTabsEnum.log,
+            })}
+            onClick={clickHandler(CalculatorTabsEnum.log)}
+          >
+            Память
+          </div>
         </div>
         <div className="tabs__content">
           {currentTab === CalculatorTabsEnum.history && <History />}
