@@ -1,9 +1,9 @@
 import "./Calculator.scss";
 import { FC } from "react";
-import Keyboard from "./Keyboard/Keyboard.tsx";
-import Sidebar from "./Sidebar/Sidebar.tsx";
-import Output from "./Output/Output.tsx";
-import MemoryControl from "./Memory/Control/MemoryControl.tsx";
+import Output from "@components/Calculator/Output/Output.tsx";
+import Sidebar from "@components/Calculator/Sidebar/Sidebar.tsx";
+import MemoryControl from "@components/Calculator/Memory/Control/MemoryControl.tsx";
+import Keyboard from "@components/Calculator/Keyboard/Keyboard.tsx";
 
 const Calculator: FC = () => {
   return (

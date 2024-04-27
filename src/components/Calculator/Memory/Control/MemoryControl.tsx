@@ -1,4 +1,6 @@
-const MemoryControl = () => {
+import { FC } from "react";
+
+const MemoryControl: FC = () => {
   return (
     <div className="calculator__memory-control">
       <button className="calculator__memory-button calculator__memory-button_unactive">

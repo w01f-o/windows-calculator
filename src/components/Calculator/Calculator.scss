@@ -1,4 +1,4 @@
-@import "../../scss/utils/index";
+@import "@styles/utils/index";
 
 .calculator {
   display: grid;
@@ -100,10 +100,11 @@
   &__output {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 0.3rem;
     padding: 1rem 0;
     grid-area: output;
-    min-height: 3rem;
+    min-height: 5.7rem;
     text-align: end;
   }
 
@@ -119,6 +120,5 @@
       size: 0.8rem;
     }
     color: gray;
-    letter-spacing: 0.2rem;
   }
 }
