@@ -9,7 +9,7 @@ interface State {
       sign: string;
       b: string;
     };
-    result: string;
+    result: number;
     isFinish: boolean;
   };
 }
