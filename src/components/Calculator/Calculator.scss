@@ -97,6 +97,36 @@
     }
   }
 
+  &__history {
+    &-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    &-item {
+      cursor: pointer;
+
+      span {
+        display: block;
+        width: 100%;
+        text-align: end;
+        &:first-child {
+          font: {
+            size: 12px;
+          }
+          color: gray;
+        }
+
+        &:last-child {
+          font: {
+            size: 20px;
+          }
+        }
+      }
+    }
+  }
+
   &__output {
     display: flex;
     flex-direction: column;

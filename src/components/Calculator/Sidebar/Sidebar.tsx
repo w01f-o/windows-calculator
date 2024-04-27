@@ -10,7 +10,7 @@ enum CalculatorTabsEnum {
 
 const Sidebar: FC = () => {
   const [currentTab, setCurrentTab] = useState<CalculatorTabsEnum>(
-    CalculatorTabsEnum.log,
+    CalculatorTabsEnum.history,
   );
 
   const clickHandler = (tab: CalculatorTabsEnum) => (): void => {
@@ -22,17 +22,17 @@ const Sidebar: FC = () => {
       <div className="tabs">
         <div
           className={clsx("tabs__item", {
-            tabs__item_active: currentTab === CalculatorTabsEnum.log,
+            tabs__item_active: currentTab === CalculatorTabsEnum.history,
           })}
-          onClick={clickHandler(CalculatorTabsEnum.log)}
+          onClick={clickHandler(CalculatorTabsEnum.history)}
         >
           Журнал
         </div>
         <div
           className={clsx("tabs__item", {
-            tabs__item_active: currentTab === CalculatorTabsEnum.history,
+            tabs__item_active: currentTab === CalculatorTabsEnum.log,
           })}
-          onClick={clickHandler(CalculatorTabsEnum.history)}
+          onClick={clickHandler(CalculatorTabsEnum.log)}
         >
           Память
         </div>

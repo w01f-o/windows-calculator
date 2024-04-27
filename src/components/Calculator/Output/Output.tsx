@@ -6,12 +6,15 @@ const Output: FC = () => {
     output: {
       expression: { a, b, sign },
       result,
+      isFinish,
     },
   } = useAppSelector((state) => state.calculator);
 
-  return result ? (
+  return result && isFinish ? (
     <div className="calculator__output">
-      <div className="calculator__expression">{`${a} ${sign} ${b} =`}</div>
+      <div className="calculator__expression">
+        {b !== "" ? `${a} ${sign} ${b} =` : `${a} ${sign} ${a} =`}
+      </div>
       <div className="calculator__result">{result}</div>
     </div>
   ) : (

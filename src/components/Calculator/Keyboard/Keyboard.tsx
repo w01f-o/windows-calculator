@@ -1,11 +1,15 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
 import { actionList, digitList, keyList } from "./keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import {
+  addToHistory,
   CE,
-  setA,
-  setB,
+  setFixedA,
+  setFixedB,
+  setIsFinish,
+  setPlusA,
+  setPlusB,
   setResult,
   setSign,
 } from "@/store/calculator/calculatorSlice.ts";
@@ -14,6 +18,8 @@ const Keyboard: FC = () => {
   const {
     output: {
       expression: { a, b, sign },
+      isFinish,
+      result,
     },
   } = useAppSelector((state) => state.calculator);
   const dispatch = useAppDispatch();
@@ -21,13 +27,22 @@ const Keyboard: FC = () => {
   const clickHandler = (key: string) => (): void => {
     if (digitList.includes(key)) {
       if (b === "" && sign === "") {
-        dispatch(setA(key));
+        dispatch(setPlusA(key));
+      } else if (a !== "" && b !== "" && isFinish) {
+        dispatch(setFixedA(result));
+        dispatch(setFixedB(key));
+        dispatch(setIsFinish(false));
       } else {
-        dispatch(setB(key));
+        dispatch(setPlusB(key));
       }
     }
 
     if (actionList.includes(key)) {
+      if (isFinish) {
+        dispatch(setFixedA(result));
+        dispatch(setFixedB(""));
+        dispatch(setIsFinish(false));
+      }
       dispatch(setSign(key));
     }
 
@@ -36,9 +51,56 @@ const Keyboard: FC = () => {
     }
 
     if (key === "=") {
-      dispatch(setResult(eval(`${a}${sign}${b}`)));
+      dispatch(setIsFinish(true));
+
+      let tempA = a;
+      let tempB = b;
+
+      if (isFinish && result !== "") {
+        tempA = result;
+        dispatch(setFixedA(tempA));
+      }
+
+      if (b === "") {
+        tempB = a;
+        dispatch(setFixedB(tempB));
+      }
+
+      switch (sign) {
+        case "+":
+          dispatch(setResult(`${+tempA + +tempB}`));
+          break;
+
+        case "-":
+          dispatch(setResult(`${+tempA - +tempB}`));
+          break;
+
+        case "x":
+          dispatch(setResult(`${+tempA * +tempB}`));
+          break;
+
+        case "/":
+          dispatch(setResult(`${+tempA / +tempB}`));
+          break;
+
+        default:
+          break;
+      }
     }
   };
+
+  useEffect(() => {
+    if (result !== "") {
+      dispatch(
+        addToHistory({
+          result,
+          expression: { a, b: b !== "" ? b : a, sign },
+          id: Date.now(),
+        }),
+      );
+    }
+    // eslint-disable-next-line
+  }, [result]);
 
   return (
     <div className="calculator__keyboard">
