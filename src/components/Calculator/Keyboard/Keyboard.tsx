@@ -83,7 +83,12 @@ const Keyboard: FC = () => {
           break;
 
         case "/":
-          dispatch(setResult(`${+tempA / +tempB}`));
+          if (tempB === "0") {
+            dispatch(CE());
+            dispatch(setFixedA("Error"));
+          } else {
+            dispatch(setResult(`${+tempA / +tempB}`));
+          }
           break;
 
         default:

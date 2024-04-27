@@ -30,7 +30,10 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     setPlusA(state, action: PayloadAction<string>) {
-      if (state.output.expression.a === "0") {
+      if (
+        state.output.expression.a === "0" ||
+        state.output.expression.a === "Error"
+      ) {
         state.output.expression.a = action.payload;
       } else {
         state.output.expression.a += action.payload;
