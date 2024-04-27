@@ -65,6 +65,7 @@
         flex-grow: 1;
         overflow-y: scroll;
         scrollbar-width: none;
+        scroll-behavior: smooth;
       }
     }
   }
@@ -112,11 +113,12 @@
     &-content {
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
       gap: 1rem;
     }
 
     &-item {
-      $transitionTime: 0.15s;
+      $transitionTime: 0.2s;
 
       cursor: pointer;
       padding: 0.3rem 0.5rem;
@@ -129,7 +131,7 @@
 
       &.history-item-enter-active {
         opacity: 1;
-        transition: opacity $transitionTime;
+        transition: $transitionTime;
       }
 
       &.history-item-exit {
@@ -138,7 +140,7 @@
 
       &.history-item-exit-active {
         opacity: 0;
-        transition: opacity $transitionTime;
+        transition: $transitionTime;
       }
 
       &:hover {

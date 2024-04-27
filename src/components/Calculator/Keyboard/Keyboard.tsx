@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { createRef, FC, useEffect } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
 import { actionList, digitList, keyList } from "./keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
@@ -13,6 +13,7 @@ import {
   setResult,
   setSign,
 } from "@/store/calculator/calculatorSlice.ts";
+import { v4 as uuidV4 } from "uuid";
 
 const Keyboard: FC = () => {
   const {
@@ -97,7 +98,8 @@ const Keyboard: FC = () => {
         addToHistory({
           result,
           expression: { a, b: b !== "" ? b : a, sign },
-          id: Date.now(),
+          id: uuidV4(),
+          nodeRef: createRef(),
         }),
       );
     }
