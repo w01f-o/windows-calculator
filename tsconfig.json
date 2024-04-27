@@ -15,10 +15,10 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@styles/*": ["scss/*"],
-      "@store/*": ["store/*"]
+      "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/styles/*": ["scss/*"],
+      "@/store/*": ["store/*"]
     },
 
     /* Linting */

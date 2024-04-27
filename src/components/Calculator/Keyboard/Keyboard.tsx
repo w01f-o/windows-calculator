@@ -1,14 +1,14 @@
 import { FC } from "react";
-import Button from "@components/UI/Button/Button.tsx";
+import Button from "@/components/UI/Button/Button.tsx";
 import { actionList, digitList, keyList } from "./keys.ts";
-import { useAppDispatch, useAppSelector } from "@hooks/redux.ts";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import {
   CE,
   setA,
   setB,
   setResult,
   setSign,
-} from "@store/calculator/calculatorSlice.ts";
+} from "@/store/calculator/calculatorSlice.ts";
 
 const Keyboard: FC = () => {
   const {

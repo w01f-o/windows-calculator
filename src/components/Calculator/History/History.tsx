@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useAppSelector } from "@hooks/redux.ts";
+import { useAppSelector } from "@/hooks/redux.ts";
 
 const History: FC = () => {
   const { history } = useAppSelector((state) => state.calculator);

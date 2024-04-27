@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import clsx from "clsx";
-import History from "../History/History.tsx";
-import Memory from "../Memory/Memory.tsx";
+import History from "@/components/Calculator/History/History";
+import Memory from "@/components/Calculator/Memory/Memory";
 
 enum CalculatorTabsEnum {
   log,
