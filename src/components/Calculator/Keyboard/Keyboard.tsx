@@ -1,4 +1,4 @@
-import { createRef, FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
 import { actionList, digitList, keyList } from "./keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
@@ -104,7 +104,6 @@ const Keyboard: FC = () => {
           result,
           expression: { a, b: b !== "" ? b : a, sign },
           id: uuidV4(),
-          nodeRef: createRef(),
         }),
       );
     }
