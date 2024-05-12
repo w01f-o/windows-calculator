@@ -39,9 +39,9 @@ export const digitList: Readonly<string[]> = [
   ".",
 ];
 
-export const basicActionList: Readonly<string[]> = ["/", "x", "-", "+"];
+export const basicOperationList: Readonly<string[]> = ["/", "x", "-", "+"];
 
-export const otherActionList: Readonly<string[]> = [
+export const otherOperationList: Readonly<string[]> = [
   "1/x",
   "x²",
   "²√x",

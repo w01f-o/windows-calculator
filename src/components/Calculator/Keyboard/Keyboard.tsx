@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
 import {
   basicOperationList,
@@ -29,11 +29,8 @@ const Keyboard: FC = () => {
       result,
       isError,
     },
-    history,
   } = useAppSelector((state) => state.calculator);
   const dispatch = useAppDispatch();
-
-  const [isBasicAction, setIsBasicAction] = useState<boolean>(true);
 
   const clickHandler = (key: string) => (): void => {
     isError && dispatch(clearAll());
@@ -79,14 +76,17 @@ const Keyboard: FC = () => {
     };
 
     if (otherOperationList.includes(key)) {
-      setIsBasicAction(false);
-
       switch (key) {
         case "%":
           updateValue((value) => value / 100);
           break;
         case "1/x":
-          updateValue((value) => 1 / value);
+          if (Number(a) === 0 || Number(b) === 0 || result! === 0) {
+            dispatch(clearAll());
+            dispatch(setIsError(true));
+          } else {
+            updateValue((value) => 1 / value);
+          }
           break;
         case "x²":
           updateValue((value) => value * value);
@@ -150,7 +150,7 @@ const Keyboard: FC = () => {
   };
 
   useEffect(() => {
-    if (result !== null && isBasicAction) {
+    if (result !== null) {
       dispatch(
         addToHistory({
           result,
@@ -159,11 +159,8 @@ const Keyboard: FC = () => {
         }),
       );
     }
-  }, [a, b, dispatch, isBasicAction, result, sign]);
-
-  useEffect(() => {
-    setIsBasicAction(true);
-  }, [history]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   return (
     <div className="calculator__keyboard">
