@@ -39,14 +39,12 @@ export const digitList: Readonly<string[]> = [
   ".",
 ];
 
-export const actionList: Readonly<string[]> = [
-  "%",
+export const basicActionList: Readonly<string[]> = ["/", "x", "-", "+"];
+
+export const otherActionList: Readonly<string[]> = [
   "1/x",
-  "x2",
-  "2/x",
-  "/",
-  "x",
-  "-",
-  "+",
+  "x²",
+  "²√x",
   "+/-",
+  "%",
 ];

@@ -1,16 +1,21 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
-import { actionList, digitList, keyList } from "./keys.ts";
+import {
+  basicActionList,
+  digitList,
+  keyList,
+  otherActionList,
+} from "./keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import {
   addToHistory,
-  CE,
-  setFixedA,
-  setFixedB,
+  clearAll,
+  setA,
+  setB,
   setIsError,
   setIsFinish,
-  setPlusA,
-  setPlusB,
+  addToA,
+  addToB,
   setResult,
   setSign,
 } from "@/store/calculator/calculatorSlice.ts";
@@ -22,76 +27,121 @@ const Keyboard: FC = () => {
       expression: { a, b, sign },
       isFinish,
       result,
+      isError,
     },
+    history,
   } = useAppSelector((state) => state.calculator);
   const dispatch = useAppDispatch();
 
+  const [isBasicAction, setIsBasicAction] = useState<boolean>(true);
+
   const clickHandler = (key: string) => (): void => {
+    isError && dispatch(clearAll());
+
     if (digitList.includes(key)) {
-      if (b === "" && sign === "") {
-        dispatch(setPlusA(key));
-      } else if (a !== "" && b !== "" && isFinish) {
-        dispatch(setFixedA(result));
-        dispatch(setFixedB(key));
+      if (b === null && sign === null) {
+        dispatch(addToA(key));
+      } else if (a !== null && b !== null && isFinish && result) {
+        dispatch(setA(String(result)));
+        dispatch(setB(key));
         dispatch(setIsFinish(false));
       } else {
-        dispatch(setPlusB(key));
+        dispatch(addToB(key));
       }
     }
 
-    if (actionList.includes(key)) {
+    if (basicActionList.includes(key)) {
       if (isFinish) {
-        dispatch(setFixedA(result));
-        dispatch(setFixedB(""));
+        dispatch(setA(String(result)));
+        dispatch(setB(null));
         dispatch(setIsFinish(false));
       }
       dispatch(setSign(key));
     }
 
     if (key === "CE") {
-      dispatch(CE());
+      dispatch(clearAll());
+    }
+
+    const updateValue = (operation: (value: number) => number) => {
+      if (a !== null && b === null && sign === null && result === null) {
+        const tempA = operation(+a);
+        dispatch(setA(String(tempA)));
+      } else if (b !== null && sign !== null && result === null) {
+        const tempB = operation(+b);
+        dispatch(setB(String(tempB)));
+      } else {
+        const tempResult = operation(result!);
+        dispatch(setResult(tempResult));
+        dispatch(setIsFinish(true));
+      }
+    };
+
+    if (otherActionList.includes(key)) {
+      setIsBasicAction(false);
+
+      switch (key) {
+        case "%":
+          updateValue((value) => value / 100);
+          break;
+        case "1/x":
+          updateValue((value) => 1 / value);
+          break;
+        case "x²":
+          updateValue((value) => value * value);
+          break;
+        case "+/-":
+          updateValue((value) => value * -1);
+          break;
+        case "²√x":
+          if (Number(a) < 0 || Number(b) < 0 || result! < 0) {
+            dispatch(clearAll());
+            dispatch(setIsError(true));
+          } else {
+            updateValue((value) => Math.sqrt(value));
+          }
+          break;
+        default:
+          break;
+      }
     }
 
     if (key === "=") {
-      if (sign === "" && !isFinish) return;
+      if (sign === null && !isFinish) return;
 
       dispatch(setIsFinish(true));
 
-      let tempA = a;
-      let tempB = b;
+      let tempA = a as string;
+      let tempB = b as string;
 
-      if (isFinish && result !== "") {
-        tempA = result;
-        dispatch(setFixedA(tempA));
+      if (isFinish && result !== null) {
+        tempA = String(result!);
+        dispatch(setA(tempA));
       }
 
-      if (b === "") {
-        tempB = a;
-        dispatch(setFixedB(tempB));
+      if (b === null) {
+        tempB = a!;
+        dispatch(setB(tempB));
       }
 
       switch (sign) {
         case "+":
-          dispatch(setResult(`${+tempA + +tempB}`));
+          dispatch(setResult(Number(tempA) + Number(tempB)));
           break;
-
         case "-":
-          dispatch(setResult(`${+tempA - +tempB}`));
+          dispatch(setResult(Number(tempA) - Number(tempB)));
           break;
-
         case "x":
-          dispatch(setResult(`${+tempA * +tempB}`));
+          dispatch(setResult(Number(tempA) * Number(tempB)));
           break;
-
         case "/":
           if (tempB === "0") {
-            dispatch(CE());
+            dispatch(clearAll());
             dispatch(setIsError(true));
           } else {
-            dispatch(setResult(`${+tempA / +tempB}`));
+            dispatch(setResult(Number(tempA) / Number(tempB)));
           }
           break;
-
         default:
           break;
       }
@@ -99,16 +149,20 @@ const Keyboard: FC = () => {
   };
 
   useEffect(() => {
-    if (result !== "") {
+    if (result !== null && isBasicAction) {
       dispatch(
         addToHistory({
           result,
-          expression: { a, b: b !== "" ? b : a, sign },
+          expression: { a, b, sign },
           id: uuidV4(),
         }),
       );
     }
-  }, [a, b, dispatch, result, sign]);
+  }, [a, b, dispatch, isBasicAction, result, sign]);
+
+  useEffect(() => {
+    setIsBasicAction(true);
+  }, [history]);
 
   return (
     <div className="calculator__keyboard">

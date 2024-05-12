@@ -1,11 +1,11 @@
 export interface History {
   expression: Expression;
-  result: string;
+  result: number;
   id?: string;
 }
 
 export interface Expression {
-  a: string;
-  sign: string;
-  b: string;
+  a: string | null;
+  sign: string | null;
+  b: string | null;
 }

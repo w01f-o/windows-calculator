@@ -6,7 +6,7 @@ interface State {
   memory: number[];
   output: {
     expression: Expression;
-    result: string;
+    result: number | null;
     isFinish: boolean;
     isError: boolean;
   };
@@ -18,10 +18,10 @@ const initialState: State = {
   output: {
     expression: {
       a: "0",
-      sign: "",
-      b: "",
+      sign: null,
+      b: null,
     },
-    result: "",
+    result: null,
     isFinish: false,
     isError: false,
   },
@@ -31,26 +31,34 @@ export const calculatorSlice = createSlice({
   name: "calculator",
   initialState,
   reducers: {
-    setPlusA(state, action: PayloadAction<string>) {
-      if (state.output.expression.a === "0") {
+    addToA(state, action: PayloadAction<string>) {
+      if (state.output.expression.a === "0" && action.payload !== ".") {
         state.output.expression.a = action.payload;
       } else {
         state.output.expression.a += action.payload;
       }
     },
-    setPlusB(state, action: PayloadAction<string>) {
-      state.output.expression.b += action.payload;
+    addToB(state, action: PayloadAction<string>) {
+      if (state.output.expression.b === null) {
+        if (action.payload === ".") {
+          state.output.expression.b = "0.";
+        } else {
+          state.output.expression.b = action.payload;
+        }
+      } else {
+        state.output.expression.b += action.payload;
+      }
     },
-    setFixedA(state, action: PayloadAction<string>) {
+    setA(state, action: PayloadAction<string | null>) {
       state.output.expression.a = action.payload;
     },
-    setFixedB(state, action: PayloadAction<string>) {
+    setB(state, action: PayloadAction<string | null>) {
       state.output.expression.b = action.payload;
     },
     setSign(state, action: PayloadAction<string>) {
       state.output.expression.sign = action.payload;
     },
-    setResult(state, action: PayloadAction<string>) {
+    setResult(state, action: PayloadAction<number>) {
       state.output.result = action.payload;
     },
     setIsFinish(state, action: PayloadAction<boolean>) {
@@ -66,18 +74,18 @@ export const calculatorSlice = createSlice({
     setIsError(state, action: PayloadAction<boolean>) {
       state.output.isError = action.payload;
     },
-    CE() {
+    clearAll() {
       return initialState;
     },
   },
 });
 
 export const {
-  setPlusA,
-  setPlusB,
-  setFixedA,
-  setFixedB,
-  CE,
+  addToA,
+  addToB,
+  setA,
+  setB,
+  clearAll,
   setSign,
   setResult,
   setIsFinish,
