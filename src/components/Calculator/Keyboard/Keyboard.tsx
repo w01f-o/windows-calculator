@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import Button from "@/components/UI/Button/Button.tsx";
 import {
-  basicActionList,
+  basicOperationList,
   digitList,
   keyList,
-  otherActionList,
+  otherOperationList,
 } from "./keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import {
@@ -50,7 +50,7 @@ const Keyboard: FC = () => {
       }
     }
 
-    if (basicActionList.includes(key)) {
+    if (basicOperationList.includes(key)) {
       if (isFinish) {
         dispatch(setA(String(result)));
         dispatch(setB(null));
@@ -72,12 +72,13 @@ const Keyboard: FC = () => {
         dispatch(setB(String(tempB)));
       } else {
         const tempResult = operation(result!);
-        dispatch(setResult(tempResult));
-        dispatch(setIsFinish(true));
+        dispatch(setA(String(tempResult)));
+        dispatch(setB(null));
+        dispatch(setIsFinish(false));
       }
     };
 
-    if (otherActionList.includes(key)) {
+    if (otherOperationList.includes(key)) {
       setIsBasicAction(false);
 
       switch (key) {
