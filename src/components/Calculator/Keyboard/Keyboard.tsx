@@ -7,6 +7,7 @@ import {
   CE,
   setFixedA,
   setFixedB,
+  setIsError,
   setIsFinish,
   setPlusA,
   setPlusB,
@@ -85,7 +86,7 @@ const Keyboard: FC = () => {
         case "/":
           if (tempB === "0") {
             dispatch(CE());
-            dispatch(setFixedA("Ошибка"));
+            dispatch(setIsError(true));
           } else {
             dispatch(setResult(`${+tempA / +tempB}`));
           }
@@ -107,8 +108,7 @@ const Keyboard: FC = () => {
         }),
       );
     }
-    // eslint-disable-next-line
-  }, [result]);
+  }, [a, b, dispatch, result, sign]);
 
   return (
     <div className="calculator__keyboard">

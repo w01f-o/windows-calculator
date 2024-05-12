@@ -8,6 +8,7 @@ interface State {
     expression: Expression;
     result: string;
     isFinish: boolean;
+    isError: boolean;
   };
 }
 
@@ -22,6 +23,7 @@ const initialState: State = {
     },
     result: "",
     isFinish: false,
+    isError: false,
   },
 };
 
@@ -30,10 +32,7 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     setPlusA(state, action: PayloadAction<string>) {
-      if (
-        state.output.expression.a === "0" ||
-        state.output.expression.a === "Error"
-      ) {
+      if (state.output.expression.a === "0") {
         state.output.expression.a = action.payload;
       } else {
         state.output.expression.a += action.payload;
@@ -64,6 +63,9 @@ export const calculatorSlice = createSlice({
       state.output.expression = action.payload.expression;
       state.output.result = action.payload.result;
     },
+    setIsError(state, action: PayloadAction<boolean>) {
+      state.output.isError = action.payload;
+    },
     CE() {
       return initialState;
     },
@@ -79,6 +81,7 @@ export const {
   setSign,
   setResult,
   setIsFinish,
+  setIsError,
   addToHistory,
   setFromHistory,
 } = calculatorSlice.actions;
