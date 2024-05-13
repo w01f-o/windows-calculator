@@ -47,4 +47,5 @@ export const otherOperationList: Readonly<string[]> = [
   "²√x",
   "+/-",
   "%",
+  "⌫",
 ];

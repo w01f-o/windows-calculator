@@ -51,6 +51,7 @@ const Keyboard: FC = () => {
       if (isFinish) {
         dispatch(setA(String(result)));
         dispatch(setB(null));
+        dispatch(setResult(null));
         dispatch(setIsFinish(false));
       }
       dispatch(setSign(key));
@@ -60,18 +61,34 @@ const Keyboard: FC = () => {
       dispatch(clearAll());
     }
 
-    const updateValue = (operation: (value: number) => number) => {
-      if (a !== null && b === null && sign === null && result === null) {
+    const updateValue = (operation: (value: number) => number | string) => {
+      const checkForFinite = (num: number | string, setState: () => void) => {
+        if (isFinite(+num)) {
+          setState();
+        } else {
+          dispatch(clearAll());
+          dispatch(setIsError(true));
+        }
+      };
+
+      if (a !== null && b === null && result === null) {
         const tempA = operation(+a);
-        dispatch(setA(String(tempA)));
-      } else if (b !== null && sign !== null && result === null) {
+        checkForFinite(tempA, () => {
+          dispatch(setA(String(tempA)));
+        });
+      } else if (a !== null && b !== null && sign !== null && result === null) {
         const tempB = operation(+b);
-        dispatch(setB(String(tempB)));
+        checkForFinite(tempB, () => {
+          dispatch(setB(String(tempB)));
+        });
       } else {
         const tempResult = operation(result!);
-        dispatch(setA(String(tempResult)));
-        dispatch(setB(null));
-        dispatch(setIsFinish(false));
+        checkForFinite(tempResult, () => {
+          dispatch(setA(String(tempResult)));
+          dispatch(setB(null));
+          dispatch(setResult(null));
+          dispatch(setIsFinish(false));
+        });
       }
     };
 
@@ -81,12 +98,7 @@ const Keyboard: FC = () => {
           updateValue((value) => value / 100);
           break;
         case "1/x":
-          if (Number(a) === 0 || Number(b) === 0 || result! === 0) {
-            dispatch(clearAll());
-            dispatch(setIsError(true));
-          } else {
-            updateValue((value) => 1 / value);
-          }
+          updateValue((value) => 1 / value);
           break;
         case "x²":
           updateValue((value) => value * value);
@@ -95,12 +107,10 @@ const Keyboard: FC = () => {
           updateValue((value) => value * -1);
           break;
         case "²√x":
-          if (Number(a) < 0 || Number(b) < 0 || result! < 0) {
-            dispatch(clearAll());
-            dispatch(setIsError(true));
-          } else {
-            updateValue((value) => Math.sqrt(value));
-          }
+          updateValue((value) => Math.sqrt(value));
+          break;
+        case "⌫":
+          updateValue((value) => String(value).slice(0, -1));
           break;
         default:
           break;

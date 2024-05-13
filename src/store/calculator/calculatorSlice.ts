@@ -32,21 +32,25 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     addToA(state, action: PayloadAction<string>) {
-      if (state.output.expression.a === "0" && action.payload !== ".") {
-        state.output.expression.a = action.payload;
+      const { a } = state.output.expression;
+      const { payload } = action;
+
+      if (a === "0" && payload !== ".") {
+        state.output.expression.a = payload;
       } else {
-        state.output.expression.a += action.payload;
+        state.output.expression.a += payload;
       }
     },
     addToB(state, action: PayloadAction<string>) {
-      if (state.output.expression.b === null) {
-        if (action.payload === ".") {
-          state.output.expression.b = "0.";
-        } else {
-          state.output.expression.b = action.payload;
-        }
+      const { b } = state.output.expression;
+      const { payload } = action;
+
+      if (b === null) {
+        state.output.expression.b = payload === "." ? "0." : payload;
+      } else if (b === "0" && payload !== ".") {
+        state.output.expression.b = payload;
       } else {
-        state.output.expression.b += action.payload;
+        state.output.expression.b += payload;
       }
     },
     setA(state, action: PayloadAction<string | null>) {
@@ -55,10 +59,10 @@ export const calculatorSlice = createSlice({
     setB(state, action: PayloadAction<string | null>) {
       state.output.expression.b = action.payload;
     },
-    setSign(state, action: PayloadAction<string>) {
+    setSign(state, action: PayloadAction<string | null>) {
       state.output.expression.sign = action.payload;
     },
-    setResult(state, action: PayloadAction<number>) {
+    setResult(state, action: PayloadAction<number | null>) {
       state.output.result = action.payload;
     },
     setIsFinish(state, action: PayloadAction<boolean>) {
