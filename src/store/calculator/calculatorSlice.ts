@@ -78,12 +78,17 @@ export const calculatorSlice = createSlice({
     setIsError(state, action: PayloadAction<boolean>) {
       state.output.isError = action.payload;
     },
+    clearOutput(state) {
+      state.output = initialState.output;
+    },
     clearAll() {
       return initialState;
     },
     addToMemory() {},
     getFromMemory() {},
-    clearMemory() {},
+    clearMemory(state) {
+      state.memory = initialState.memory;
+    },
     plusToMemory() {},
     minusToMemory() {},
   },
@@ -106,6 +111,7 @@ export const {
   clearMemory,
   plusToMemory,
   minusToMemory,
+  clearOutput,
 } = calculatorSlice.actions;
 
 export default calculatorSlice.reducer;

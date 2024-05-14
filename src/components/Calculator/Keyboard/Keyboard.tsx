@@ -18,6 +18,7 @@ import {
   addToB,
   setResult,
   setSign,
+  clearOutput,
 } from "@/store/calculator/calculatorSlice.ts";
 import { v4 as uuidV4 } from "uuid";
 import keyboardStyles from "./keyboard.module.scss";
@@ -60,6 +61,10 @@ const Keyboard: FC = () => {
 
     if (key === "CE") {
       dispatch(clearAll());
+    }
+
+    if (key === "C") {
+      dispatch(clearOutput());
     }
 
     const updateValue = (operation: (value: number) => number | string) => {
