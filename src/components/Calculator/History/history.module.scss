@@ -1,0 +1,39 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.item {
+  $transitionTime: 0.2s;
+
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.3rem;
+  transition: $transitionTime;
+
+  &:hover {
+    background: #e0e0e0;
+    transition: $transitionTime;
+  }
+
+  span {
+    display: block;
+    width: 100%;
+    text-align: end;
+
+    &:first-child {
+      font: {
+        size: 12px;
+      }
+      color: gray;
+    }
+
+    &:last-child {
+      font: {
+        size: 20px;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-interface params {
+interface numberToExpParams {
   number: number;
   expLimit: number;
   outputLimit?: number;
@@ -8,7 +8,7 @@ export const formatNumberToExp = ({
   number,
   outputLimit,
   expLimit,
-}: params): number | string => {
+}: numberToExpParams): number | string => {
   const tempLimit = outputLimit ? outputLimit : 16;
 
   if (String(number).length <= tempLimit) {

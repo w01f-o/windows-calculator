@@ -1,0 +1,5 @@
+.keyboard {
+  display: grid;
+  grid-template: repeat(6, 3rem) / repeat(4, 4.5rem);
+  grid-gap: 0.16rem;
+}

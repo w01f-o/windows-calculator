@@ -5,7 +5,7 @@ import {
   digitList,
   keyList,
   otherOperationList,
-} from "./keys.ts";
+} from "./keys/keys.ts";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import {
   addToHistory,
@@ -20,6 +20,7 @@ import {
   setSign,
 } from "@/store/calculator/calculatorSlice.ts";
 import { v4 as uuidV4 } from "uuid";
+import keyboardStyles from "./keyboard.module.scss";
 
 const Keyboard: FC = () => {
   const {
@@ -173,7 +174,7 @@ const Keyboard: FC = () => {
   }, [result]);
 
   return (
-    <div className="calculator__keyboard">
+    <div className={keyboardStyles.keyboard}>
       {keyList.map((el) => (
         <Button key={el} onClick={clickHandler(el)}>
           {el}
