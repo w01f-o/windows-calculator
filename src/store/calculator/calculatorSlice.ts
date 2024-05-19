@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Expression, History } from "@/types/calculator.types.ts";
+import { Expression, History, Memory } from "@/types/calculator.types.ts";
+import { v4 as uuid } from "uuid";
 
 interface State {
   history: History[];
-  memory: number[];
+  memory: Memory[];
   output: {
     expression: Expression;
     result: number | null;
@@ -84,8 +85,48 @@ export const calculatorSlice = createSlice({
     clearAll() {
       return initialState;
     },
-    addToMemory() {},
-    getFromMemory() {},
+    addToMemory(state) {
+      if (
+        state.output.expression.a !== null &&
+        state.output.expression.b === null &&
+        state.output.result === null
+      ) {
+        state.memory.push({
+          value: Number(state.output.expression.a),
+          id: uuid(),
+        });
+      } else if (
+        state.output.expression.a !== null &&
+        state.output.expression.b !== null &&
+        state.output.expression.sign !== null &&
+        state.output.result === null
+      ) {
+        state.memory.push({
+          value: Number(state.output.expression.b),
+          id: uuid(),
+        });
+      } else {
+        state.memory.push({
+          value: Number(state.output.result),
+          id: uuid(),
+        });
+      }
+    },
+    getFromMemory(state) {
+      if (
+        state.output.expression.a !== null &&
+        state.output.expression.b === null &&
+        state.output.result === null
+      ) {
+      } else if (
+        state.output.expression.a !== null &&
+        state.output.expression.b !== null &&
+        state.output.expression.sign !== null &&
+        state.output.result === null
+      ) {
+      } else {
+      }
+    },
     clearMemory(state) {
       state.memory = initialState.memory;
     },

@@ -9,3 +9,8 @@ export interface Expression {
   sign: string | null;
   b: string | null;
 }
+
+export interface Memory {
+  value: number;
+  id: string;
+}

@@ -27,7 +27,7 @@ const Output: FC = () => {
     if (result && isFinish) {
       return `${a} ${sign} ${b} =`;
     } else {
-      return `${a === "0" ? "" : a ?? ""}${sign ?? ""}${b ?? ""}`;
+      return `${a === "0" ? "" : a ?? ""} ${sign ?? ""} ${b ?? ""}`;
     }
   };
 

@@ -20,7 +20,7 @@ import {
   setSign,
   clearOutput,
 } from "@/store/calculator/calculatorSlice.ts";
-import { v4 as uuidV4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import keyboardStyles from "./keyboard.module.scss";
 
 const Keyboard: FC = () => {
@@ -171,7 +171,7 @@ const Keyboard: FC = () => {
         addToHistory({
           result,
           expression: { a, b, sign },
-          id: uuidV4(),
+          id: uuid(),
         }),
       );
     }
