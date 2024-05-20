@@ -9,7 +9,7 @@ const Memory: FC = () => {
   return (
     <div className={memoryStyles.content}>
       {memory.length
-        ? memory.map((item) => <MemoryItem value={item} />)
+        ? memory.map((item) => <MemoryItem value={item} key={item.id} />)
         : "В памяти ничего не сохранено"}
     </div>
   );

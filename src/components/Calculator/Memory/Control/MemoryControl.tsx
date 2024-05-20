@@ -5,8 +5,7 @@ import {
   addToMemory,
   clearMemory,
   getFromMemory,
-  minusToMemory,
-  plusToMemory,
+  plusMinusToMemory,
 } from "@/store/calculator/calculatorSlice.ts";
 import { memoryActionList } from "@/components/Calculator/Memory/keys/keys.ts";
 import memoryStyles from "../memory.module.scss";
@@ -26,11 +25,11 @@ const MemoryControl: FC = () => {
         break;
 
       case "M+":
-        dispatch(plusToMemory());
+        dispatch(plusMinusToMemory({ operation: "M+", memory: undefined }));
         break;
 
       case "M-":
-        dispatch(minusToMemory());
+        dispatch(plusMinusToMemory({ operation: "M-", memory: undefined }));
         break;
 
       case "MS":

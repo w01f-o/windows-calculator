@@ -86,52 +86,80 @@ export const calculatorSlice = createSlice({
       return initialState;
     },
     addToMemory(state) {
-      if (
-        state.output.expression.a !== null &&
-        state.output.expression.b === null &&
-        state.output.result === null
-      ) {
+      const { a, b, sign } = state.output.expression;
+      const { result } = state.output;
+
+      if (a !== null && b === null && result === null) {
         state.memory.push({
-          value: Number(state.output.expression.a),
+          value: Number(a),
           id: uuid(),
         });
-      } else if (
-        state.output.expression.a !== null &&
-        state.output.expression.b !== null &&
-        state.output.expression.sign !== null &&
-        state.output.result === null
-      ) {
+      } else if (a !== null && b !== null && sign !== null && result === null) {
         state.memory.push({
-          value: Number(state.output.expression.b),
+          value: Number(b),
           id: uuid(),
         });
       } else {
         state.memory.push({
-          value: Number(state.output.result),
+          value: Number(result),
           id: uuid(),
         });
       }
     },
     getFromMemory(state) {
-      if (
-        state.output.expression.a !== null &&
-        state.output.expression.b === null &&
-        state.output.result === null
-      ) {
-      } else if (
-        state.output.expression.a !== null &&
-        state.output.expression.b !== null &&
-        state.output.expression.sign !== null &&
-        state.output.result === null
-      ) {
+      const { a, b, sign } = state.output.expression;
+      const { result } = state.output;
+      const lastMemoryValue = String(
+        state.memory[state.memory.length - 1].value,
+      );
+
+      if (a !== null && b === null && result === null) {
+        state.output.expression.a = lastMemoryValue;
+      } else if (a !== null && b !== null && sign !== null && result === null) {
+        state.output.expression.b = lastMemoryValue;
       } else {
+        state.output.expression.a = lastMemoryValue;
+        state.output.expression.b = null;
+        state.output.result = null;
+        state.output.isFinish = false;
       }
     },
-    clearMemory(state) {
-      state.memory = initialState.memory;
+    clearMemory(state, action: PayloadAction<Memory | undefined>) {
+      if (!action.payload) {
+        state.memory = initialState.memory;
+      } else {
+        state.memory = state.memory.filter(
+          (item) => item.id !== action.payload!.id,
+        );
+      }
     },
-    plusToMemory() {},
-    minusToMemory() {},
+    plusMinusToMemory(
+      state,
+      action: PayloadAction<{
+        memory: Memory | undefined;
+        operation: "M+" | "M-";
+      }>,
+    ) {
+      const { a, b, sign } = state.output.expression;
+      const { result } = state.output;
+      const { operation } = action.payload;
+      let itemIndex: number = state.memory.findIndex(
+        (item) => item.id === action.payload.memory?.id,
+      );
+
+      if (itemIndex === -1) {
+        itemIndex = state.memory.length - 1;
+      }
+
+      if (a !== null && b === null && result === null) {
+        state.memory[itemIndex].value += operation === "M+" ? +a : +a * -1;
+      } else if (a !== null && b !== null && sign !== null && result === null) {
+        state.memory[itemIndex].value += operation === "M+" ? +b : +b * -1;
+      } else {
+        state.memory[itemIndex].value +=
+          operation === "M+" ? result! : result! * -1;
+      }
+    },
   },
 });
 
@@ -150,8 +178,7 @@ export const {
   addToMemory,
   getFromMemory,
   clearMemory,
-  plusToMemory,
-  minusToMemory,
+  plusMinusToMemory,
   clearOutput,
 } = calculatorSlice.actions;
 
