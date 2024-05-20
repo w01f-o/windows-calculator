@@ -175,7 +175,6 @@ const Keyboard: FC = () => {
         }),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   return (
