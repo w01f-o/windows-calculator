@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useAppDispatch } from "@/hooks/redux.ts";
 import { History } from "@/types/calculator.types.ts";
 import { setFromHistory } from "@/store/calculator/calculatorSlice.ts";
@@ -8,7 +8,7 @@ interface HistoryItemProps {
   element: History;
 }
 
-const HistoryItem: FC<HistoryItemProps> = ({ element }) => {
+const HistoryItem: FC<HistoryItemProps> = memo(({ element }) => {
   const dispatch = useAppDispatch();
 
   const clickHandler = (item: History) => (): void => {
@@ -21,6 +21,6 @@ const HistoryItem: FC<HistoryItemProps> = ({ element }) => {
       <span>{element.result}</span>
     </div>
   );
-};
+});
 
 export default HistoryItem;

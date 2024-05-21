@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useAppSelector } from "@/hooks/redux.ts";
 import outputStyles from "./output.module.scss";
 import { formatNumberToExp } from "@/utils/formatNumberToExp.ts";
@@ -13,29 +13,29 @@ const Output: FC = () => {
     },
   } = useAppSelector((state) => state.calculator);
 
-  const getResult = (): string | number => {
+  const outputResult = useMemo((): string | number => {
     if (result && isFinish) {
       return formatNumberToExp({ number: result, expLimit: 8 });
-    } else if (b === null) {
+    } else if (!b) {
       return `${formatNumberToExp({ number: +a!, expLimit: 8 })}`;
     } else {
       return `${formatNumberToExp({ number: +b, expLimit: 8 })}`;
     }
-  };
+  }, [a, b, isFinish, result]);
 
-  const getExpression = (): string => {
+  const outputExpression = useMemo((): string => {
     if (result && isFinish) {
       return `${a} ${sign} ${b} =`;
     } else {
       return `${a === "0" ? "" : a ?? ""} ${sign ?? ""} ${b ?? ""}`;
     }
-  };
+  }, [a, b, isFinish, result, sign]);
 
   return (
     <div className={outputStyles.output}>
-      <div className={outputStyles.expression}>{getExpression()}</div>
+      <div className={outputStyles.expression}>{outputExpression}</div>
       <div className={outputStyles.result}>
-        {isError ? "Ошибка" : getResult()}
+        {isError ? "Ошибка" : outputResult}
       </div>
     </div>
   );

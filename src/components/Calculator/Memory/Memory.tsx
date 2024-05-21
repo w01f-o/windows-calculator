@@ -4,7 +4,7 @@ import MemoryItem from "@/components/Calculator/Memory/MemoryItem.tsx";
 import memoryStyles from "./memory.module.scss";
 
 const Memory: FC = () => {
-  const { memory } = useAppSelector((state) => state.calculator);
+  const memory = useAppSelector((state) => state.calculator.memory);
 
   return (
     <div className={memoryStyles.content}>

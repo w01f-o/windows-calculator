@@ -11,10 +11,10 @@ import { memoryActionList } from "@/components/Calculator/Memory/keys/keys.ts";
 import memoryStyles from "../memory.module.scss";
 
 const MemoryControl: FC = () => {
-  const { memory } = useAppSelector((state) => state.calculator);
+  const memory = useAppSelector((state) => state.calculator.memory);
   const dispatch = useAppDispatch();
 
-  const clickHandler = (memoryAction: string) => (): void => {
+  const clickHandler = (memoryAction: string) => {
     switch (memoryAction) {
       case "MC":
         dispatch(clearMemory());
@@ -51,7 +51,7 @@ const MemoryControl: FC = () => {
               !memory.length && (action === "MC" || action === "MR"),
           })}
           disabled={!memory.length && (action === "MC" || action === "MR")}
-          onClick={clickHandler(action)}
+          onClick={() => clickHandler(action)}
         >
           {action}
         </button>

@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Expression, History, Memory } from "@/types/calculator.types.ts";
 import { v4 as uuid } from "uuid";
+import {
+  basicOperationList,
+  digitList,
+  otherOperationList,
+} from "@/components/Calculator/Keyboard/keys/keys.ts";
 
 interface State {
   history: History[];
@@ -32,79 +37,194 @@ export const calculatorSlice = createSlice({
   name: "calculator",
   initialState,
   reducers: {
-    addToA(state, action: PayloadAction<string>) {
-      const { a } = state.output.expression;
-      const { payload } = action;
+    keyboardClickHandler(state, action: PayloadAction<string>) {
+      const { isError, isFinish, result } = state.output;
+      const { a, b, sign } = state.output.expression;
+      const key = action.payload;
 
-      if (a === "0" && payload !== ".") {
-        state.output.expression.a = payload;
-      } else {
-        state.output.expression.a += payload;
+      const clearAll = () => {
+        state.output = initialState.output;
+        state.history = initialState.history;
+        state.memory = initialState.memory;
+      };
+
+      const clearOutput = ({ isError }: { isError: boolean }) => {
+        state.output = isError
+          ? { ...initialState.output, isError: true }
+          : initialState.output;
+      };
+
+      if (isError) {
+        clearOutput({ isError: false });
+        return;
+      }
+
+      if (digitList.includes(key)) {
+        if (!b && !sign) {
+          a === "0" && key !== "."
+            ? (state.output.expression.a = key)
+            : (state.output.expression.a += key);
+        } else if (a && b && isFinish && result) {
+          state.output.expression.a = String(result);
+          state.output.expression.b = String(key);
+          state.output.isFinish = false;
+        } else {
+          if (!b) {
+            state.output.expression.b = key === "." ? "0." : key;
+          } else if (b === "0" && key !== ".") {
+            state.output.expression.b = key;
+          } else {
+            state.output.expression.b += key;
+          }
+        }
+      }
+
+      if (basicOperationList.includes(key)) {
+        if (isFinish) {
+          state.output.expression.a = String(result);
+          state.output.expression.b = null;
+          state.output.result = null;
+          state.output.isFinish = false;
+        }
+        state.output.expression.sign = key;
+      }
+
+      if (key === "CE") {
+        clearAll();
+      }
+
+      if (key === "C") {
+        clearOutput({ isError: false });
+      }
+
+      const updateValue = (operation: (value: number) => number | string) => {
+        const checkForFinite = (num: number | string, setState: () => void) => {
+          if (isFinite(+num)) {
+            setState();
+          } else {
+            clearOutput({ isError: true });
+          }
+        };
+
+        if (a && !b && !result) {
+          const tempA = operation(+a);
+
+          checkForFinite(tempA, () => {
+            state.output.expression.a = String(tempA);
+          });
+        } else if (a && b && sign && !result) {
+          const tempB = operation(+b);
+
+          checkForFinite(tempB, () => {
+            state.output.expression.b = String(tempB);
+          });
+        } else {
+          const tempResult = operation(result!);
+
+          checkForFinite(tempResult, () => {
+            state.output.expression.a = String(tempResult);
+            state.output.expression.b = null;
+            state.output.result = null;
+            state.output.isFinish = false;
+          });
+        }
+      };
+
+      if (otherOperationList.includes(key)) {
+        switch (key) {
+          case "%":
+            updateValue((value) => value / 100);
+            break;
+          case "1/x":
+            updateValue((value) => 1 / value);
+            break;
+          case "x²":
+            updateValue((value) => value * value);
+            break;
+          case "+/-":
+            updateValue((value) => value * -1);
+            break;
+          case "²√x":
+            updateValue((value) => Math.sqrt(value));
+            break;
+          case "⌫":
+            updateValue((value) => String(value).slice(0, -1));
+            break;
+          default:
+            break;
+        }
+      }
+
+      if (key === "=") {
+        if (!sign && !isFinish) return;
+
+        state.output.isFinish = true;
+
+        let tempA = a;
+        let tempB = b;
+
+        if (isFinish && result) {
+          tempA = String(result);
+          state.output.expression.a = tempA;
+        }
+
+        if (!b) {
+          tempB = a;
+          state.output.expression.b = tempB;
+        }
+
+        switch (sign) {
+          case "+":
+            state.output.result = Number(tempA) + Number(tempB);
+            break;
+          case "-":
+            state.output.result = Number(tempA) - Number(tempB);
+            break;
+          case "x":
+            state.output.result = Number(tempA) * Number(tempB);
+            break;
+          case "/":
+            if (tempB === "0") {
+              clearOutput({ isError: true });
+            } else {
+              state.output.result = Number(tempA) / Number(tempB);
+            }
+            break;
+          default:
+            break;
+        }
       }
     },
-    addToB(state, action: PayloadAction<string>) {
-      const { b } = state.output.expression;
-      const { payload } = action;
+    addToHistory(state) {
+      const { result } = state.output;
+      const { a, b, sign } = state.output.expression;
 
-      if (b === null) {
-        state.output.expression.b = payload === "." ? "0." : payload;
-      } else if (b === "0" && payload !== ".") {
-        state.output.expression.b = payload;
-      } else {
-        state.output.expression.b += payload;
+      if (result) {
+        state.history.push({ expression: { a, b, sign }, result, id: uuid() });
       }
-    },
-    setA(state, action: PayloadAction<string | null>) {
-      state.output.expression.a = action.payload;
-    },
-    setB(state, action: PayloadAction<string | null>) {
-      state.output.expression.b = action.payload;
-    },
-    setSign(state, action: PayloadAction<string | null>) {
-      state.output.expression.sign = action.payload;
-    },
-    setResult(state, action: PayloadAction<number | null>) {
-      state.output.result = action.payload;
-    },
-    setIsFinish(state, action: PayloadAction<boolean>) {
-      state.output.isFinish = action.payload;
-    },
-    addToHistory(state, action: PayloadAction<History>) {
-      state.history.push(action.payload);
     },
     setFromHistory(state, action: PayloadAction<History>) {
       state.output.expression = action.payload.expression;
       state.output.result = action.payload.result;
     },
-    setIsError(state, action: PayloadAction<boolean>) {
-      state.output.isError = action.payload;
-    },
-    clearOutput(state) {
-      state.output = initialState.output;
-    },
-    clearAll() {
-      return initialState;
-    },
     addToMemory(state) {
       const { a, b, sign } = state.output.expression;
       const { result } = state.output;
 
-      if (a !== null && b === null && result === null) {
-        state.memory.push({
-          value: Number(a),
-          id: uuid(),
-        });
-      } else if (a !== null && b !== null && sign !== null && result === null) {
-        state.memory.push({
-          value: Number(b),
-          id: uuid(),
-        });
+      let pushedValue: number;
+
+      if (a && !b && !result) {
+        pushedValue = Number(a);
+      } else if (a && b && sign && !result) {
+        pushedValue = Number(b);
       } else {
-        state.memory.push({
-          value: Number(result),
-          id: uuid(),
-        });
+        pushedValue = result!;
       }
+
+      state.memory.push({
+        value: Number(pushedValue),
+        id: uuid(),
+      });
     },
     getFromMemory(state) {
       const { a, b, sign } = state.output.expression;
@@ -113,9 +233,9 @@ export const calculatorSlice = createSlice({
         state.memory[state.memory.length - 1].value,
       );
 
-      if (a !== null && b === null && result === null) {
+      if (a && !b && !result) {
         state.output.expression.a = lastMemoryValue;
-      } else if (a !== null && b !== null && sign !== null && result === null) {
+      } else if (a && b && sign && !result) {
         state.output.expression.b = lastMemoryValue;
       } else {
         state.output.expression.a = lastMemoryValue;
@@ -151,35 +271,29 @@ export const calculatorSlice = createSlice({
         itemIndex = state.memory.length - 1;
       }
 
-      if (a !== null && b === null && result === null) {
-        state.memory[itemIndex].value += operation === "M+" ? +a : +a * -1;
-      } else if (a !== null && b !== null && sign !== null && result === null) {
-        state.memory[itemIndex].value += operation === "M+" ? +b : +b * -1;
+      let temp: number;
+
+      if (a && !b && !result) {
+        temp = Number(a);
+      } else if (a && b && sign && !result) {
+        temp = Number(b);
       } else {
-        state.memory[itemIndex].value +=
-          operation === "M+" ? result! : result! * -1;
+        temp = result!;
       }
+
+      state.memory[itemIndex].value += operation === "M+" ? +temp : +temp * -1;
     },
   },
 });
 
 export const {
-  addToA,
-  addToB,
-  setA,
-  setB,
-  clearAll,
-  setSign,
-  setResult,
-  setIsFinish,
-  setIsError,
   addToHistory,
   setFromHistory,
   addToMemory,
   getFromMemory,
   clearMemory,
   plusMinusToMemory,
-  clearOutput,
+  keyboardClickHandler,
 } = calculatorSlice.actions;
 
 export default calculatorSlice.reducer;
