@@ -11,7 +11,9 @@ const History: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(addToHistory());
+    if (result) {
+      dispatch(addToHistory());
+    }
     // eslint-disable-next-line
   }, [result]);
 
