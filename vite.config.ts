@@ -14,4 +14,5 @@ export default defineConfig({
       "@/utils": "/src/utils",
     },
   },
+  base: "/windows-calculator",
 });
