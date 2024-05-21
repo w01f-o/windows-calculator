@@ -61,11 +61,13 @@ export const calculatorSlice = createSlice({
 
       if (digitList.includes(key)) {
         if (!b && !sign) {
+          if (a?.split('').includes('.') && key === ".") return
+
           a === "0" && key !== "."
             ? (state.output.expression.a = key)
             : (state.output.expression.a += key);
         } else if (a && b && isFinish && result) {
-          state.output.expression.a = String(result);
+                    state.output.expression.a = String(result);
           state.output.expression.b = String(key);
           state.output.isFinish = false;
         } else {
@@ -74,6 +76,8 @@ export const calculatorSlice = createSlice({
           } else if (b === "0" && key !== ".") {
             state.output.expression.b = key;
           } else {
+            if (b.split('').includes('.') && key === ".") return;
+
             state.output.expression.b += key;
           }
         }
@@ -86,6 +90,10 @@ export const calculatorSlice = createSlice({
           state.output.result = null;
           state.output.isFinish = false;
         }
+        if (a!.split('')[a!.length - 1] === ".") {
+          state.output.expression.a = a!.slice(0, -1);
+        }
+
         state.output.expression.sign = key;
       }
 
@@ -156,12 +164,16 @@ export const calculatorSlice = createSlice({
       }
 
       if (key === "=") {
+        if (b?.split('')[b?.length - 1] === ".") {
+          state.output.expression.b = b?.slice(0, -1);
+        }
+
         if (!sign && !isFinish) return;
 
         state.output.isFinish = true;
 
         let tempA = a;
-        let tempB = b;
+        let tempB = state.output.expression.b;
 
         if (isFinish && result) {
           tempA = String(result);
