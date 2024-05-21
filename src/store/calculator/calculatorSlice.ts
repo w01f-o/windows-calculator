@@ -175,7 +175,7 @@ export const calculatorSlice = createSlice({
         let tempA = a;
         let tempB = state.output.expression.b;
 
-        if (isFinish && result) {
+        if (isFinish && result !== null) {
           tempA = String(result);
           state.output.expression.a = tempA;
         }
@@ -211,7 +211,7 @@ export const calculatorSlice = createSlice({
       const { result } = state.output;
       const { a, b, sign } = state.output.expression;
 
-      if (result) {
+      if (result !== null) {
         state.history.push({ expression: { a, b, sign }, result, id: uuid() });
       }
     },

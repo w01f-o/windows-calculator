@@ -14,7 +14,7 @@ const Output: FC = () => {
   } = useAppSelector((state) => state.calculator);
 
   const outputResult = useMemo((): string | number => {
-    if (result && isFinish) {
+    if (result !== null && isFinish) {
       return formatNumberToExp({ number: result, expLimit: 8 });
     } else if (!b) {
       return `${formatNumberToExp({ number: +a!, expLimit: 8 })}`;
@@ -24,10 +24,10 @@ const Output: FC = () => {
   }, [a, b, isFinish, result]);
 
   const outputExpression = useMemo((): string => {
-    if (result && isFinish) {
+    if (result !== null && isFinish) {
       return `${a} ${sign} ${b} =`;
     } else {
-      return `${a === "0" ? "" : a ?? ""} ${sign ?? ""} ${b ?? ""}`;
+      return `${a} ${sign ?? ""} ${b ?? ""}`;
     }
   }, [a, b, isFinish, result, sign]);
 
