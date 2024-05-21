@@ -1,8 +1,9 @@
 .calculator {
   display: grid;
-  height: 480px;
-  max-width: 620px;
-  grid-template: 2fr 1fr 4fr / 4fr 3.6fr;
+  height: 804px;
+  max-width: 1085px;
+  width: 100%;
+  grid-template: 1fr 0.5fr 4fr / 4fr 3.6fr;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 2rem;
   border-radius: 1rem;

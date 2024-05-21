@@ -9,9 +9,9 @@
     border-radius: 0.3rem;
     text-align: center;
     flex-grow: 1;
-    padding-block: 0.5rem;
+    //padding-block: 0.2rem;
     font: {
-      size: 0.75rem;
+      size: 1.3125rem;
     }
 
     &:hover {
@@ -66,13 +66,17 @@
   transition: $transitionTime;
 
   button {
-    padding: 0.1rem;
+    padding: 0.2rem;
     font: {
-      size: 9px;
+      size: 1.1rem;
     }
   }
 }
 
 .number {
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.175rem;
+
+  font: {
+    size: 1.75rem;
+  }
 }

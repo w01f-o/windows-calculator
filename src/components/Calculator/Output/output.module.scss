@@ -3,21 +3,21 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  padding: 1rem 0;
-  min-height: 5.7rem;
+  padding: 1rem 0 0.5rem;
+  height: 100%;
   text-align: end;
 }
 
 .result {
   font: {
-    size: 2rem;
+    size: 3.5rem;
     weight: 500;
   }
 }
 
 .expression {
   font: {
-    size: 0.8rem;
+    size: 1.4rem;
   }
   color: gray;
 }

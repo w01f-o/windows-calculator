@@ -30,7 +30,7 @@ const Sidebar: FC = () => {
   }, [history, memory]);
 
   return (
-    <div className={sidebarStyles.sidebar}>
+    <aside className={sidebarStyles.sidebar}>
       <div className={sidebarStyles.tabs}>
         <div className={sidebarStyles.tabs_control}>
           <div
@@ -57,7 +57,7 @@ const Sidebar: FC = () => {
           {currentTab === CalculatorTabsEnum.memory && <Memory />}
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

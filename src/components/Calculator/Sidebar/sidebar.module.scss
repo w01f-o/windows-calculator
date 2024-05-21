@@ -1,17 +1,17 @@
 .sidebar {
   grid-row: span 3;
-  padding-left: 1rem;
+  padding: 1rem 0 0 2rem;
 }
 
 .tabs {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
   height: 100%;
 
   .tabs_control {
     display: flex;
-    gap: 1rem;
+    gap: 1.75rem;
   }
 }
 
@@ -21,7 +21,7 @@
   cursor: pointer;
   position: relative;
   font: {
-    size: 12px;
+    size: 1.3125rem;
   }
 
   &::before {
@@ -52,4 +52,8 @@
   scrollbar-width: none;
 
   scroll-behavior: smooth;
+
+  font: {
+    size: 1.75rem;
+  }
 }
