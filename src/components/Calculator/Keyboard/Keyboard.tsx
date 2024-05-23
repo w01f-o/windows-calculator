@@ -8,12 +8,14 @@ import keyboardStyles from "./keyboard.module.scss";
 const Keyboard: FC = () => {
   const dispatch = useAppDispatch();
 
-  const clickHandler = (key: string) => dispatch(keyboardClickHandler(key));
+  const clickHandler = (key: string) => (): void => {
+    dispatch(keyboardClickHandler(key));
+  };
 
   return (
     <div className={keyboardStyles.keyboard}>
       {keyList.map((el) => (
-        <Button key={el} onClick={() => clickHandler(el)}>
+        <Button key={el} onClick={clickHandler(el)}>
           {el}
         </Button>
       ))}

@@ -14,7 +14,6 @@ const History: FC = () => {
     if (result !== null) {
       dispatch(addToHistory());
     }
-    // eslint-disable-next-line
   }, [result]);
 
   return (

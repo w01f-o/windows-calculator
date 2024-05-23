@@ -15,31 +15,29 @@ interface MemoryItemProps {
 const MemoryItem: FC<MemoryItemProps> = memo(({ value }) => {
   const dispatch = useAppDispatch();
 
+  const clickHandler = (operation: "MC" | "M+" | "M-") => (): void => {
+    switch (operation) {
+      case "MC":
+        dispatch(clearMemory(value));
+        break;
+
+      case "M+":
+        dispatch(plusMinusToMemory({ operation: "M+", memory: value }));
+        break;
+
+      case "M-":
+        dispatch(plusMinusToMemory({ operation: "M-", memory: value }));
+        break;
+    }
+  };
+
   return (
     <div className={memoryStyles.item}>
       <div className={memoryStyles.number}>{value.value}</div>
       <div className={memoryStyles.buttons}>
-        <Button
-          onClick={() => {
-            dispatch(clearMemory(value));
-          }}
-        >
-          MC
-        </Button>
-        <Button
-          onClick={() => {
-            dispatch(plusMinusToMemory({ operation: "M+", memory: value }));
-          }}
-        >
-          M+
-        </Button>
-        <Button
-          onClick={() => {
-            dispatch(plusMinusToMemory({ operation: "M-", memory: value }));
-          }}
-        >
-          M-
-        </Button>
+        <Button onClick={clickHandler("MC")}>MC</Button>
+        <Button onClick={clickHandler("M+")}>M+</Button>
+        <Button onClick={clickHandler("M-")}>M-</Button>
       </div>
     </div>
   );

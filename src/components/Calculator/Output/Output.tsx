@@ -17,9 +17,9 @@ const Output: FC = () => {
     if (result !== null && isFinish) {
       return formatNumberToExp({ number: result, expLimit: 8 });
     } else if (!b) {
-      return `${formatNumberToExp({ number: +a!, expLimit: 8 })}`;
+      return formatNumberToExp({ number: a ?? 0, expLimit: 8 });
     } else {
-      return `${formatNumberToExp({ number: +b, expLimit: 8 })}`;
+      return `${formatNumberToExp({ number: b, expLimit: 8 })}`;
     }
   }, [a, b, isFinish, result]);
 
@@ -27,7 +27,7 @@ const Output: FC = () => {
     if (result !== null && isFinish) {
       return `${a} ${sign} ${b} =`;
     } else {
-      return `${a} ${sign ?? ""} ${b ?? ""}`;
+      return `${a ?? ""} ${sign ?? ""} ${b ?? ""}`;
     }
   }, [a, b, isFinish, result, sign]);
 

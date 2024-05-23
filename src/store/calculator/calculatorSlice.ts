@@ -23,7 +23,7 @@ const initialState: State = {
   memory: [],
   output: {
     expression: {
-      a: "0",
+      a: null,
       sign: null,
       b: null,
     },
@@ -61,13 +61,18 @@ export const calculatorSlice = createSlice({
 
       if (digitList.includes(key)) {
         if (!b && !sign) {
-          if (a?.split('').includes('.') && key === ".") return
+          if (a?.split("").includes(".") && key === ".") return;
 
-          a === "0" && key !== "."
-            ? (state.output.expression.a = key)
+          if (a === null && key === ".") {
+            state.output.expression.a = "0.";
+            return;
+          }
+
+          a === null
+            ? (state.output.expression.a = `${key}`)
             : (state.output.expression.a += key);
         } else if (a && b && isFinish && result) {
-                    state.output.expression.a = String(result);
+          state.output.expression.a = String(result);
           state.output.expression.b = String(key);
           state.output.isFinish = false;
         } else {
@@ -76,7 +81,7 @@ export const calculatorSlice = createSlice({
           } else if (b === "0" && key !== ".") {
             state.output.expression.b = key;
           } else {
-            if (b.split('').includes('.') && key === ".") return;
+            if (b.split("").includes(".") && key === ".") return;
 
             state.output.expression.b += key;
           }
@@ -90,7 +95,7 @@ export const calculatorSlice = createSlice({
           state.output.result = null;
           state.output.isFinish = false;
         }
-        if (a!.split('')[a!.length - 1] === ".") {
+        if (a!.split("")[a!.length - 1] === ".") {
           state.output.expression.a = a!.slice(0, -1);
         }
 
@@ -105,40 +110,59 @@ export const calculatorSlice = createSlice({
         clearOutput({ isError: false });
       }
 
-      const updateValue = (operation: (value: number) => number | string) => {
-        const checkForFinite = (num: number | string, setState: () => void) => {
-          if (isFinite(+num)) {
-            setState();
+      if (key === "⌫") {
+        if (a && !b && sign && !result) {
+          state.output.expression.sign = null;
+        } else if (a && !b) {
+          state.output.expression.a = a.length > 1 ? a.slice(0, -1) : null;
+        } else if (a && b && sign && !result) {
+          state.output.expression.b = b.length > 1 ? b.slice(0, -1) : null;
+        } else {
+          state.output.expression.a =
+            String(result).length > 1 ? String(result).slice(0, -1) : null;
+          state.output.expression.b = null;
+          state.output.result = null;
+          state.output.isFinish = false;
+        }
+      }
+
+      if (otherOperationList.includes(key)) {
+        const updateValue = (operation: (value: number) => number | string) => {
+          const checkForFinite = (
+            num: number | string,
+            setState: () => void,
+          ) => {
+            if (isFinite(+num)) {
+              setState();
+            } else {
+              clearOutput({ isError: true });
+            }
+          };
+
+          if (a && !b && !result) {
+            const tempA = operation(+a);
+
+            checkForFinite(tempA, () => {
+              state.output.expression.a = String(tempA);
+            });
+          } else if (a && b && sign && !result) {
+            const tempB = operation(+b);
+
+            checkForFinite(tempB, () => {
+              state.output.expression.b = String(tempB);
+            });
           } else {
-            clearOutput({ isError: true });
+            const tempResult = operation(result!);
+
+            checkForFinite(tempResult, () => {
+              state.output.expression.a = String(tempResult);
+              state.output.expression.b = null;
+              state.output.result = null;
+              state.output.isFinish = false;
+            });
           }
         };
 
-        if (a && !b && !result) {
-          const tempA = operation(+a);
-
-          checkForFinite(tempA, () => {
-            state.output.expression.a = String(tempA);
-          });
-        } else if (a && b && sign && !result) {
-          const tempB = operation(+b);
-
-          checkForFinite(tempB, () => {
-            state.output.expression.b = String(tempB);
-          });
-        } else {
-          const tempResult = operation(result!);
-
-          checkForFinite(tempResult, () => {
-            state.output.expression.a = String(tempResult);
-            state.output.expression.b = null;
-            state.output.result = null;
-            state.output.isFinish = false;
-          });
-        }
-      };
-
-      if (otherOperationList.includes(key)) {
         switch (key) {
           case "%":
             updateValue((value) => value / 100);
@@ -155,16 +179,13 @@ export const calculatorSlice = createSlice({
           case "²√x":
             updateValue((value) => Math.sqrt(value));
             break;
-          case "⌫":
-            updateValue((value) => String(value).slice(0, -1));
-            break;
           default:
             break;
         }
       }
 
       if (key === "=") {
-        if (b?.split('')[b?.length - 1] === ".") {
+        if (b?.split("")[b?.length - 1] === ".") {
           state.output.expression.b = b?.slice(0, -1);
         }
 

@@ -1,5 +1,5 @@
 interface numberToExpParams {
-  number: number;
+  number: number | string;
   expLimit: number;
   outputLimit?: number;
 }
@@ -14,6 +14,6 @@ export const formatNumberToExp = ({
   if (String(number).length <= tempLimit) {
     return number;
   } else {
-    return number.toExponential(expLimit);
+    return Number(number).toExponential(expLimit);
   }
 };
